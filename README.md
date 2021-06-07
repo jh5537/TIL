@@ -6,7 +6,7 @@
 
 ## [1_python 기초](./1_pythonStudy/python_lecture.md)
 
-### [01_OT](./1_pythonStudy/01_OT/hello.py)
+### [01_OT](./1_pythonStudy/01_OT/)
 
 ### [02_dataType](./1_pythonStudy/02_dataType/day2_data1.py)
 
