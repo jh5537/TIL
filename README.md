@@ -46,9 +46,41 @@
 
 ## [2_data analysis](./2_dataAnalysis/)
 
+## [1_numpy](./2_dataAnalysis/01_numpy/)
 
+## [2_pandas](./2_dataAnalysis/02_pandas/)
 
 
 
 ## [3_git](./3_git_tutorial/)
+
+### 1_markdown
+
+### 2_git
+
+### 3_github
+
+
+
+## [4_코딩 기본 알고리즘](./4_algorithm)
+
+### 1_스택과 큐
+
+### 2_우선순위에 따라 데이터를 꺼내는 자료구조
+
+### 3_트리 자료구조
+
+### 4_바이너리 인덱스 트리
+
+### 5_선택 정렬과 삽입 정렬
+
+### 6_퀵 정렬과 계수 정렬
+
+### 7_정렬 알고리즘 비교 및 문제 풀이
+
+
+
+## [5_빅데이터를 위한 통계상식](./5_basicStatistics)
+
+
 

@@ -28,6 +28,8 @@ pip install pandas-profiling==2.11.0
 
 pip install opencv-python-headless
 
+pip install opencv-python opencv-python-headless
+
 pip install xgboost
 
 pip install shap
@@ -38,6 +40,19 @@ pip install tensorflow==2.2.0
 
 pip install lightgbm
 
+
+
+pip install scikit-learn
+
+pip install tqdm
+
+pip install pandas
+
+pip install PyYAML
+
+pip install matplotlib
+
+pip install seaborn
 
 pip freeze > tmp.txt
 
@@ -159,5 +174,31 @@ kaggle 접속
 
 
 
+## 2021-06-08
 
 
+
+
+
+### Google Colab 사용 방법
+
+- 방향키 ↑↓: 셀 간 이동
+- Enter: 편집모드
+- Ctrl + Enter: 셀 실행
+- Shift + Enter: 셀 실행 + 다음 셀 선택
+
+----
+
+- Ctrl +M D: 셀 삭제
+- Ctrl + M K: 셀 위로 이동
+- Ctrl + M J: 셀 아래로 이동
+
+더블클릭 또는 Enter 키를 눌러 수정
+
+
+
+### profiling
+
+일반 데이터를 profiling하면 범주형 데이터들이 포함되지 않은 채로 상관관계 적용.
+
+이를 해결하기 위해 범주형 데이터를 encoding하여 모든 변수를 포함한 correlation matrix를 볼 수 있다.
