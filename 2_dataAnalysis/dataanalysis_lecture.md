@@ -202,3 +202,116 @@ kaggle 접속
 일반 데이터를 profiling하면 범주형 데이터들이 포함되지 않은 채로 상관관계 적용.
 
 이를 해결하기 위해 범주형 데이터를 encoding하여 모든 변수를 포함한 correlation matrix를 볼 수 있다.
+
+
+
+## 2021-06-09
+
+### PCA(Principal Component Analysis)
+
+데이터 추상화.
+
+
+
+#### 데이터의 종류
+
+- Numeric
+  - Integer
+  - Float
+- Categorical
+  - Nominal
+  - Ordinal
+  - Boolean
+
+
+
+#### Feature Selection Method
+
+변수에 따라 Feature Selection Method를 선택
+
+| Variable            | Numerical Input          | Categorical Input                  |
+| ------------------- | ------------------------ | ---------------------------------- |
+| Numerical Output    | Pearson's(*), Spearman's | ANOVA, Kendall's                   |
+| Catergorical Output | ANOVA, Kendall's         | Chi-squared(*), Mutual Information |
+
+
+
+#### 평균(Mean) 
+
+- M = (a1 + a2 + a3 + ... + an)/n
+
+
+
+#### 분산(Variance)
+
+(평균을 기준으로) 변수가 흩어진 정도. 편차 제곱(squared deviatioins)의 평균값(mean value).
+
+- V = {(a1-m)^2 + (a2-m)^2 + (a3-m)^2 + ... + (an-m)^2}/n
+
+  - 모분산(population variance): σ^2 => 관측값에서 모평균을 빼고 그것을 제곱한 값을 모두 더하여 전체 데이터 수 n으로 나눈 것.
+
+  - 표본분산(sample variance):  *s*^2 => 관측값에서 표본평균을 빼고 제곱한 값을 모두 더한 것을 n−1로 나눈 것.
+
+
+
+#### 공분산(Covariance)
+
+두 개의 확률 변수의 선형관계를 나타내는 값. 두 개의 확률 변수의 흩어진 정도. 한 확률 변수의 증감에 따른 다른 확률 변수의 증감 경향에 대한 측도.
+
+- Cov(X, Y) = {(X1 - XM)(Y1 - YM) + (X2 - XM)(Y2 - YM) + (X3 - XM)(Y3 - YM) + ... + (Xn - XM)(Yn - YM)}/n
+
+![image-20210609100542292](dataanalysis_lecture.assets/image-20210609100542292.png)
+
+![image-20210609100522417](dataanalysis_lecture.assets/image-20210609100522417.png)
+
+
+
+#### 이진 분류 기법(binary classification)
+
+| P-A                | Actual Values = 1 | Actual Values =0 |
+| ------------------ | ----------------- | ---------------- |
+| Predicted Values=1 | True Positive     | False Positive   |
+| Predicted Values=0 | False Negative    | True Negative    |
+
+![KakaoTalk_Photo_2021-06-09-11-00-28](dataanalysis_lecture.assets/KakaoTalk_Photo_2021-06-09-11-00-28.png)
+
+- True Positive: ~할 것이라 예측하고, 실제로 ~함.
+- False Positive: ~할 것이라 예측했으나, 실제로는 ~하지 않음. - Type I error
+- False Negative: ~하지 않을 것이라 예측했으나, 실제로는 ~함. - Type II error
+- True Negative: ~하지 않을 것이라 예측하고, 실제로 ~하지 않음.
+
+
+
+#### Recall과 Precision
+
+- Recall model: False negative(Type II error)를 줄이는 데에 중점. - 공장에서 불량검사를 할 때, 양품이 불량으로 판정되어도 치명적이지 않지만, 불량을 양품으로 판정하면 치명적임. positive와 negative의 비율이 매우 불균형한 경우에 많이 사용(공장에서 생산한 물건은 대부분 양품이고, 소수의 불량품을 찾아내는 것처럼).
+- Precision model: False positive(Type I error)를 줄이는 데에 중점. - 사진 분석처럼 특정 개체를 인식할 때는 엉뚱하게 인식하는 오류를 줄이는 것이 중요.
+
+
+
+#### 피어슨 상관계수를 통한 신용카드 이용내역 분석
+
+- 피어슨 r
+
+![image-20210609114801007](dataanalysis_lecture.assets/image-20210609114801007.png)
+
+PAY_AMT1~6은 유사한 변수 - 상관관계 분석 시 분산을 교란함. 이는 분석모델에 악영향. 또한 모델의 차원이 많을수록 예측값의 정확도가 낮아짐. 변수를 통합해서 활용. -> 다중공선성 제거.
+
+즉, 차원 축소를 위한 기준으로서 feature selection
+
+
+
+- 다중공선성 제거 이후의 피어슨 r
+
+![image-20210609142512710](dataanalysis_lecture.assets/image-20210609142512710.png)
+
+
+
+- 빅데이터는 표본을 추출하지 않고 모집단 채로 자료를 분석.
+
+
+
+## 2021-06-10
+
+
+

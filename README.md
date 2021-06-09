@@ -46,9 +46,11 @@
 
 ## [2_data analysis](./2_dataAnalysis/)
 
-## [1_numpy](./2_dataAnalysis/01_numpy/)
+### [1_numpy](./2_dataAnalysis/01_numpy/)
 
-## [2_pandas](./2_dataAnalysis/02_pandas/)
+### [2_pandas](./2_dataAnalysis/02_pandas/)
+
+### [3_bigDataAnalysis](./2_dataAnalysis/03_big_data_analysis/)
 
 
 
