@@ -268,7 +268,7 @@ kaggle 접속
 
 #### 이진 분류 기법(binary classification)
 
-| P-A                | Actual Values = 1 | Actual Values =0 |
+| Predicted\Actual   | Actual Values = 1 | Actual Values =0 |
 | ------------------ | ----------------- | ---------------- |
 | Predicted Values=1 | True Positive     | False Positive   |
 | Predicted Values=0 | False Negative    | True Negative    |
@@ -313,5 +313,158 @@ PAY_AMT1~6은 유사한 변수 - 상관관계 분석 시 분산을 교란함. �
 
 ## 2021-06-10
 
+### Machine Learning
+
+#### "예측(Predict)"이란?
+
+- 이전에 본 적 없는 새로운 데이터에 대한 정확한 출력 예측.
+
+제시된 사진이 코끼리인지 바나나인지 판별하는 것은 predict(그 중에서도 classification).
+
+전기 수요나 수도의 사용량, 오늘 오후의 기온 등 연속된 numerical value를 예측하는 것은 regression이라고 함.
 
 
+
+#### Predictive Analytics
+
+	1. 무엇을 예측하는가?
+ 	2. 무엇을 할 것인가?
+
+
+
+예측을 위해서는 모델을 생성
+
+![image-20210610092434648](dataanalysis_lecture.assets/image-20210610092434648.png)
+
+
+
+#### 예측분석 사례 - Decision Tree
+
+예측 분석 응용: 이탈 모델링으로 고객 이탈 방지하기
+
+- 무엇을 예측하는가?
+  - 어느 고객이 떠나갈 것인가?
+- 무엇을 할 것인가?
+  - 떠날 위기에 있는 고객들을 타깃으로 한 고객 유지 마케팅 수행.
+
+---
+
+예측 분석 응용: 부동산 담보대출 채권 가치 추산
+
+- 무엇을 예측하는가?
+  - 부동산 담보대출 고객 중에서 누가 향후 90일 내에 조기상환할 것인가?
+- 무엇을 할 것인가?
+  - 부동산 담보대출 채권의 가치를 계산한 후 다른 은행에 팔아넘길지 여부를 결정.
+
+
+
+조건을 생성하여 의사결정구조 형성
+
+![image-20210610093558935](dataanalysis_lecture.assets/image-20210610093558935.png)
+
+
+
+엔트로피가 높은 조건부터 낮은 조건 순으로 분화
+
+![image-20210610093701635](dataanalysis_lecture.assets/image-20210610093701635.png)
+
+
+
+각 노드별로 세분화하여 확률을 평가
+
+![image-20210610093814441](dataanalysis_lecture.assets/image-20210610093814441.png)
+
+
+
+예측을 통해 위험 회피
+
+
+
+### 머신러닝의 데이터 준비과정(Data Preparation)
+
+#### 데이터 준비과정의 중요성
+
+원시 데이터를 모델링에 적합한 형식으로 변환하는 작업이 중심 내용이며, 데이터를 준비하는 것은 예측 모델 생성 프로젝트에서 가장 중요한 부분이며 가장 많은 시간이 소요
+
+- 데이터 정리 : 데이터의 오류 또는 오류를 식별하고 수정
+- 특징 선택 : 작업과 가장 관련된 입력 변수 식별
+- 데이터 변환 : 변수의 척도 또는 분포 파악
+- 특징 엔지니어링 : 사용 가능한 데이터에서 새로운 변수 도출
+- 차원 감소 : 데이터의 간결한 예측 생성
+
+
+
+#### 결측치 처리
+
+`dataframe.isnull().sum()` 을 통해 결측치 여부 확인.
+
+SimpleImputer() 클래스를 사용하여 NaN 값으로 표시된 모든 누락 된 값을 열의 평균으로 변환.
+
+```python
+# statistical imputation transform for the horse colic dataset
+
+from numpy import isnan
+from pandas import read_csv
+from sklearn.impute import SimpleImputer
+
+# load dataset
+url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/horse-colic.csv'
+dataframe = read_csv(url, header=None, na_values='?')
+
+# split into input and output elements
+data = dataframe.values
+ix = [i for i in range(data.shape[1]) if i != 23]
+X, y = data[:, ix], data[:, 23]
+
+# print total missing
+print('Missing: %d' % sum(isnan(X).flatten()))
+
+# define imputer
+imputer = SimpleImputer(strategy='mean')
+
+# fit on the dataset
+imputer.fit(X)
+
+# transform the dataset
+Xtrans = imputer.transform(X)
+
+# print total missing
+print('Missing: %d' % sum(isnan(Xtrans).flatten()))
+```
+
+
+
+#### 특징 추출
+
+**Recursive Feature Elimination**
+
+예측 모델을 개발할 때 입력 변수의 수를 줄이는 프로세스
+
+RFE 사용하여 기능 추출(scikit-learn).
+
+
+
+**Regression Feature Selection**
+
+(Numerical input, Numerical output)
+
+
+
+#### 데이터 정규화
+
+- 정규화(Normalization): typically means rescales the values into a range of [0, 1].
+- 표준화(Standardization): typically means rescales data to have a mean of 0 and a standard deviation of 0 (unit variance).
+
+sklearn의 `StandardScaler()` 활용하여 표준화.
+
+
+
+#### 원 핫 인코딩으로 범주 변환(One Hot Encoding)
+
+
+
+#### 숫자 변수의 범주형 변수로 변환
+
+
+
+#### PCA를 통한 차원 축소
