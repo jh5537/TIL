@@ -52,6 +52,8 @@
 
 ### [3_bigDataAnalysis](./2_dataAnalysis/03_big_data_analysis/)
 
+### [4_prerocessing](./2_dataAnalysis/04_preprocessing/)
+
 
 
 ## [3_git](./3_git_tutorial/)
@@ -64,7 +66,7 @@
 
 
 
-## [4_코딩 기본 알고리즘](./4_algorithm)
+## [4_코딩 기본 알고리즘](./4_algorithm/)
 
 ### 1_스택과 큐
 
@@ -82,7 +84,13 @@
 
 
 
-## [5_빅데이터를 위한 통계상식](./5_basicStatistics)
+## [5_풀스택 인터페이스 개발 프로그래밍](./5_full-stackInterface/)
 
 
+
+## [6_빅데이터를 위한 통계상식](./6_basicStatistics/)
+
+
+
+웹 데이터 수집 및 다이나믹 시각화
 

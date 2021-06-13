@@ -234,6 +234,10 @@ kaggle 접속
 | Numerical Output    | Pearson's(*), Spearman's | ANOVA, Kendall's                   |
 | Catergorical Output | ANOVA, Kendall's         | Chi-squared(*), Mutual Information |
 
+- Pearson's: 두 변수의 관계가 선형적일 때(등간척도/비율척도) 적용 가능.
+- Spearmans's: 서열척도 변수가 포함되어도 적용 가능. 등간척도/비율척도 두 변수 간 관계가 비선형적일 때 적용.
+- Kendall's: spearman 상관계수와 같은 경우에 적용 가능. 표본이 작을 때 spearman 상관계수보다 신뢰할 수 있음.
+
 
 
 #### 평균(Mean) 
@@ -450,6 +454,14 @@ RFE 사용하여 기능 추출(scikit-learn).
 
 
 
+**Classification Feature Selection**
+
+(Numerical Input, Categorical Output)
+
+- Feature selection is performed using ANOVA F measure via the f_classif() function.
+
+
+
 #### 데이터 정규화
 
 - 정규화(Normalization): typically means rescales the values into a range of [0, 1].
@@ -461,10 +473,76 @@ sklearn의 `StandardScaler()` 활용하여 표준화.
 
 #### 원 핫 인코딩으로 범주 변환(One Hot Encoding)
 
+자연어 처리에서 문자를 숫자로 바꾸어 처리하는 기법(Categorical Encoding) 중 하나. 
+
+변수를 목록화해서 개별로 그 목록값에 대한 이진값으로 만드는 방법.
+
+`from sklearn.preprocessing import OneHotEncoder`
+
+
+
++ Categorical Encoding 중에는 Label Encoding이라는 기법도 있음.
+  + 알파벳 오더순으로 숫자를 할당.
+  + `from sklearn.preprocessing import LabelEncoder`
+
 
 
 #### 숫자 변수의 범주형 변수로 변환
 
+KBinDiscretizer를 활용하여 숫자 변수에 구간을 설정하여 Bin값을 부여할 수 있음.
+
+- 예) 나이별 구간 설정: 10~19 - 청소년층(0), 20~39 - 청년층(1), 40~59 - 중년층(2), ...
+
 
 
 #### PCA를 통한 차원 축소
+
+
+
+## 2021-06-11
+
+### 파생변수
+
+- column의 추상화를 거치고 나서 기존에 없던 변수가 새로 생겼음을 확인할 수 있는데, 이를 파생변수라고 함.
+
+- 파생변수의 생성에는 원칙이 없음.
+  - Business Understanding + Data Understanding에서 얻은 통찰로 파생변수를 설정.
+  - bias가 생기지 않도록 주의하여 객관적인 변수를 생성(관련 참고: machine ethics)
+
+
+
+### 데이터분석 방법론
+
+- 프로젝트의 앞부분에 이를 명시하여, 해당 프로젝트가 현재 어느 부분을 다루고 있는지를 확인해야 함.
+  - 일정관리에도 사용 가능.
+- 처음부터 모든 것을 하기에는 데이터도, 컴퓨팅 파워도, 일정도 부족하기 때문에 사전학습된 모델(pre-trained model)을 이용하여 분석하는 경우도 많음.
+  - 프로젝트의 출발점이 어디인지를 인지하고 명시하는 것이 중요(어떤 모델을 이용하여 분석했는가?, ...).
+- 보고서 작성 시
+  - 전체 과정(위의 표) 중 어떤 단계에서부터 시작하는지(시작점), 어떤 자료를 활용하는지, 어떤 분석 모델을 사용했는지, featuring은 어떤 방식으로 이루어지는지, 현재는 어느 단계에 있는지, 보완해야 할 부분은 어느 것인지...등을 명시.
+
+#### CRISP-DM(Cross Industry Standard Process for Data Mining)
+
+- 데이터 마이닝 전문가가 사용하는 일반적인 접근 방식을 설명한, 가장 널리 사용되는 공개 표준 분석 모델(데이터분석 방법론)
+
+![image-20210611091617788](dataanalysis_lecture.assets/image-20210611091617788.png)
+
+![image-20210611092056897](dataanalysis_lecture.assets/image-20210611092056897.png)
+
+
+
+#### Data Science Lifecylce(TDSP_microsoft)
+
+![tdsp-lifecycle2](dataanalysis_lecture.assets/tdsp-lifecycle2.png)
+
+- 데이터분석 방법론 중 하나
+
+
+
+
+
+
+
+
+
+
+
