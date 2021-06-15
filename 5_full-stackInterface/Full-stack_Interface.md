@@ -38,11 +38,23 @@ Client - Web Server - Application Servers - Databasem
 
 
 
+#### CRUD
+
+create, read, update, delete
+
+
+
 ### SQL 문법
+
+시작하기 전에 시스템 환경설정의 MySQL에서 서버가 실행중인지 확인.
 
 자료 명령어 실행 후에는 항상 Response를 확인하여 자료의 정합성을 확인.
 
-MySQL에서는 대소문자를 구분하지 않음.
+MySQL에서는 대소문자를 구분하지 않음(단, 따옴표'' 안의 문자열은 구분).
+
+결과창에서 확인할 수 있는 cursor을 인지하고 있어야 함. 파이썬에서 연동할 때 사용.
+
+종료시 강제종료하지 말고 File-Close Connection Tab을 이용해 종료할 것.
 
 
 
@@ -217,7 +229,7 @@ MySQL에서는 대소문자를 구분하지 않음.
 
 - INNER JOIN
 
-  - 두 테이블에 공통으로 존재하는 정보만 출력.
+  - 두 테이블에 공통으로 존재하는 정보만 출력(교집합 개념).
 
   - ```sql
     SELECT *
@@ -228,7 +240,7 @@ MySQL에서는 대소문자를 구분하지 않음.
 
 - FULL JOIN
 
-  - 두 테이블에 매칭되는 정보를 모두 출력.
+  - 두 테이블에 매칭되는 정보를 모두 출력(합집합 개념).
 
   - FULL JOIN의 결과는 매우 큰 데이터 세트가 될 수 있음.
 
@@ -263,13 +275,103 @@ MySQL에서는 대소문자를 구분하지 않음.
 
 #### RANK, DENSE_RANK, ROW_NUMBER
 
+- 데이터에 순위를 매기는 데 사용하는 함수. 동점의 처리 방법에 차이.
+- `SELECT RANK() OVER(ORDER BY column) FROM ...`
+  - 동점을 같은 등수로 계산하되, 데이터 세트를 고려해 다음 등수를 매김.
+- `SELECT DENSE_RANK() OVER(ORDER BY column) FROM ...`
+  - 동점을 같은 등수로 계산하되, 다음 등수는 동점 등수의 바로 다음 등수를 매김.
 
+- `SELECT ROW_NUMBER() OVER(ORDER BY column) FROM ...`
+  - 동점인 경우도 서로 다른 등수로 계산.
+- 특정 칼럼 내에서 순위를 매기려면 parition 사용.
+  - `SELECT RANK/DENSE_RANK/ROW_NUMBER() OVER(PARTITION BY 분류칼럼 ORDER BY 순위기준칼럼) FROM ...`
+
+
+
+#### SUBQUERY
+
+- 연산자 이후 () 안의 쿼리를 의미.
+- IN, FROM, JOIN 등에서 사용.
+- subquery의 실행 결과가 하나의 테이블로 사용.
+- FROM, JOIN에 subquery를 사용하는 경우, (subquery) 뒤에 항상 문자열을 입력해야 함. 쿼리 내부에서 사용하는 해당 테이블의 명칭.
+
+
+
+### Import CSV
+
+- Schemas - 우클릭 - Create Schema - 스키마 이름 입력 후 Apply로 생성.
+
+- Table - 우클릭 - Table Data Import Wizard - Browse를 통해 csv 파일 선택 - Create new table - Encoding 설정, 소스 컬럼의 데이터 타입 확인 및 설정하여 생성.
+
+생성 후에는 새로고침하여 이용.
 
 
 
 ### Google BigQuery
 
+
+
 ### Python - pymysql 연동
+
+pip install mysql-connector-python
+
+pip install PyMySQL==1.0.0
+
+
+
+```python
+import pymysql.cursors
+
+# Connect to the database
+connection = pymysql.connect(host='127.0.0.1',
+        user='root',
+        password='0000',
+        db='TIP_Schema',
+        charset='utf8',
+        cursorclass=pymysql.cursors.DictCursor)
+try:
+    with connection.cursor() as cursor:
+        # Read a single record
+        #sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
+        sql = "select total_bill from TIP_Schema.tips where tip >= 7;"
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        print(result)
+finally:
+    connection.close()
+```
+
+파이썬에서 sql을 실행시켜 커서가 위치한 부분의 값을 읽어오는 구문.
+
+
+
+```python
+import pymysql.cursors
+import pandas as pd
+
+# MySQL DB에서 데이터 받아와서 DataFrame에 저장
+conn = pymysql.connect(host='127.0.0.1', user='root', 
+                       password='0000', db='classicmodels',
+                       charset='utf8', autocommit=True, 
+                       cursorclass=pymysql.cursors.DictCursor)
+try:
+   with conn.cursor() as curs:
+      sql = "select total_bill from TIP_Schema.tips where tip >= 7;"
+      curs.execute(sql)
+      rs = curs.fetchall()
+
+      # DB에서 받아온 값을 DataFrame에 넣음
+      df = pd.DataFrame(rs)
+      print(df)
+      # df.to_csv('query.csv')를 통해 받아온 데이터프레임을 csv로 저장할 수 있음.
+
+finally:
+   conn.close()
+```
+
+DataFrame의 형태로 표현.
+
+
 
 ### SQL vs NoSQL
 
