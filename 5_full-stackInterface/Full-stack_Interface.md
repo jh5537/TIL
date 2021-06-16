@@ -373,6 +373,12 @@ DataFrame의 형태로 표현.
 
 
 
+### 시각화
+
+pandas, matplotlib, seaborn을 활용하여 데이터 시각화.
+
+
+
 ### SQL vs NoSQL
 
 최근에는 빅데이터에 적합한 NoSQL을 사용.
