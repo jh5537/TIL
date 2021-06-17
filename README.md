@@ -74,7 +74,7 @@
 
 ## [5_풀스택 인터페이스 개발 프로그래밍](./5_full-stackInterface/)
 
-### [1_SQL](./5_full-stackInterface/01_SQL/)
+### [1_Data Understanding](./5_full-stackInterface/01_DataUnerstandingwithSQL/)
 
 
 

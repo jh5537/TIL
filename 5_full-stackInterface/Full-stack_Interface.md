@@ -385,6 +385,313 @@ pandas, matplotlib, seaborn을 활용하여 데이터 시각화.
 
 
 
+### 종합
+
+지금까지 진행한 파편화된 기능들을 종합.
+
+목표변수를 설정.
+
+각 변수의 상관관계 확인. 각 변수와 목표변수 사이의 인과관계 확인.
+
+공분산
+
+여러 변수 사이의 관계를 확률분포로 표현.
+
+tips 데이터를 이용.
+
+
+
+#### 1. 사전 준비
+
+- 결측치가 이미 제거된 자료이므로, 결측치 처리 연습을 위해 사전에 결측치를 생성해주기.
+
+  - MySQL에서 null 값을 데이터에 삽입.
+
+    ```sql
+    use TIP_Schema;
+    
+    select * from tips; # 자료 확인.
+    
+    # 결측치를 포함한 임의의 값을 추가.
+    insert into tips(total_bill, tip, sex, smoker, day, time, size)
+    values(16.99, null, 'Female', 'No', 'Sun', 'Dinner', 2);
+    
+    insert into tips(total_bill, tip, sex, smoker, day, time, size)
+    values(20.34, 1.66, null, 'No', 'Sun', 'Dinner', 3);
+    
+    insert into tips(total_bill, tip, sex, smoker, day, time, size)
+    values(13.23, 2.66, 'Male', 'Yes', 'Sat', null, null);
+    
+    insert into tips(total_bill, tip, sex, smoker, day, time, size)
+    values(26.34, 2.2, 'Female', 'No', 'Fri', 'Lunch', 4);
+    
+    # ...
+    
+    select * from tips; # 결과 확인.
+    ```
+
+  - (+ 값을 삭제할 때)
+
+    ```sql
+    # 삭제할 값 확인
+    select * from tips where tips.sex is null;
+    select * from tips where tips.tip is null;
+    
+    # 삭제
+    delete from tips where tips.sex is null;
+    delete from tips where tips.tip is null;
+    
+    # 결과 확인.
+    select * from tips;
+    ```
+
+    
+
+- 값이 수정된 데이터를 MySQL에서 추출.
+
+  ```python
+  import pymysql.cursors
+  import pandas as pd
+  
+  conn = pymysql.connect(host='127.0.0.1', user='root', 
+                         password='0000', db='TIP_Schema', charset='utf8',
+                         autocommit=True, cursorclass=pymysql.cursors.DictCursor)
+  
+  try:
+      with conn.cursor() as curs:
+          sql = "select * from TIP_Schema.tips;"
+          curs.execute(sql)
+          rs = curs.fetchall()
+          df = pd.DataFrame(rs)
+          print(df)
+          df.to_csv('tips2.csv')
+          
+  finally: 
+      conn.close()
+  ```
+
+
+
+- pandas를 통해 데이터 읽어들이기.
+
+  `tips = pd.read_csv('tips2.csv', index_col=0)`
+
+
+
+#### 2. 문자형 변수를 숫자형 변수로 변환
+
+- replace 메서드 사용.
+
+  - `inplace = True` 사용.
+
+    ```python
+    tips['sex'].replace({'Female': 0, 'Male':1}, inplace=True)
+    tips['smoker'].replace({'No': 0, 'Yes':1}, inplace=True)
+    tips['day'].replace({'Thur': 0, 'Fri':1, 'Sat': 2, 'Sun': 3}, inplace=True)
+    tips['time'].replace({'Lunch': 0, 'Dinner':1}, inplace=True)
+    
+    # 해당 변화를 데이터프레임에 즉각 반영.
+    ```
+
+  - 또는
+
+    ```python
+    tips['sex'] = tips['sex'].replace({'Female': 0, 'Male':1})
+    tips['smoker'] = tips['smoker'].replace({'No': 0, 'Yes':1})
+    tips['day'] = tips['day'].replace({'Thur': 0, 'Fri':1, 'Sat': 2, 'Sun': 3})
+    tips['time'] = tips['time'].replace({'Lunch': 0, 'Dinner':1})
+    
+    # 해당 변화를 새로운 데이터프레임에 담음.
+    ```
+
+
+
+#### 3. 결측치 제거
+
+- 임퓨터 가져오기.
+
+  ```python
+  from numpy import isnan
+  from sklearn.impute import SimpleImputer
+  ```
+
+- 결측치 확인.
+
+  `tips.isnull().sum()`
+
+- DataFrame 형태의 자료를 array로 변환.
+
+  `data = tips.values`
+
+- 결측치에 중위값을 입력하도록 설정.
+  `imputer = SimpleImputer(strategy='median')`
+
+- array의 결측치 제거.
+
+  ```python
+  imputer.fit(data)
+  data_trans = imputer.transform(data)
+  ```
+
+- array를 다시 DataFrame 형식으로 변경
+
+  `tips_trans = pd.DataFrame(data_trans, columns=['total_bill', 'tip', 'sex', 'smoker', 'day', 'time', 'size'])`
+
+- 결측치가 제거되었는지 확인.
+
+  `tips.isnull().sum()`
+
+
+
+#### + 파생변수 추가
+
+자료와 사업에 대한 통찰이 있다면, 적절한 파생변수를 추가할 수 있음.
+
+```python
+# 파생변수 1. tip rate
+tip_rate = tips_imp.tip/tips_imp.total_bill
+tips_imp['tip_rate'] = tip_rate
+
+# 파생변수 2. 1인당 지불요금
+tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
+```
+
+
+
+#### 4. 특징 추출
+
+차원 축소를 위해 관련성이 높은 변수만 남기고 그 외의 변수는 추출.
+
+- RFE와 PCA
+  - RFE는 목표변수와 독립변수의 상관관계를 통해 차원을 축소. - 목표변수에 따라 결과가 다르게 나옴(Recursive Feature Elimination).
+  - PCA는 목표변수 없이 독립변수의 상관관계만으로 차원을 축소. - 목표변수와 관계없이 일정한 결과가 나옴(Principal component analysis).
+
+- regression feature selection
+
+  - 회귀분석을 통해 적절한 변수를 선별.
+
+    
+
+- 특징 추출을 위해 목표변수를 설정.
+
+  - 1. 매출
+    2. 팁
+    3. 요일별 팀 size 수
+    4. tip rate 
+    5. 요일별 방문 예상 팀 수
+
+  ```python
+  # 목표변수 설정: tip(1)
+  n = 1
+  # 선택할 특징의 수 설정
+  m = 5
+  ```
+
+  
+
+- RFE를 이용한 특징 추출
+
+  ```python
+  # 목표변수 입력
+  y = tips_imp.iloc[:,n]
+  X = tips_imp.drop(tips_imp.columns[[n]], axis=1)
+  # 특징 추출
+  estimator = SVR(kernel="linear")
+  rfe = RFE(estimator, n_features_to_select=m)
+  rfe.fit(X, y)
+  for i in range(X.shape[1]):
+      print('Column: %d, Rank: %d, Selected=%s' % (i, rfe.ranking_[i], rfe.support_[i]))
+  ```
+
+  선별된 특징 확인.
+
+  ```python
+  tips_RFE = tips_imp.copy()
+  for i in range(X.shape[1]):
+      if rfe.support_[i] == False:
+          if i < n:
+              k = i
+          else:
+              k = i+1
+          tips_RFE.drop(tips_imp.columns[[k]], axis=1,
+                        inplace=True)
+  tips_RFE
+  ```
+
+  컬럼 선별.
+
+
+
+#### 5. 데이터 정규화 및 표준화
+
+- 정규화
+
+  ```python
+  # 정규화
+  trans = MinMaxScaler()
+  tips_N = trans.fit_transform(tips_RFE)
+  tips_RFE_norm = pd.DataFrame(tips_N, columns=[tips_RFE.columns])
+  tips_RFE_norm.describe()
+  ```
+
+  
+
+- 표준화
+
+  ```python
+  # 표준화
+  sc = StandardScaler()
+  tips_S = sc.fit_transform(tips_RFE)
+  tips_RFE_stan = pd.DataFrame(tips_S, columns=[tips_RFE.columns])
+  tips_RFE_stan.describe().round()
+  ```
+
+  
+
+#### + 다른 방법을 사용하여 특징 추출
+
+- PCA
+
+  ```python
+  trans = PCA(n_components=m)
+  tips_PCA = trans.fit_transform(tips_imp)
+  tips_PCA[:3,:]
+  ```
+
+  
+
+- Regression Feature Selection
+
+  ```python
+  # 목표변수 입력
+  y = tips_imp.iloc[:,n]
+  X = tips_imp.drop(tips_imp.columns[[n]], axis=1)
+  # 특징 추출
+  fs = SelectKBest(score_func=f_regression, k=m)
+  tips_RFS = fs.fit_transform(X, y)
+  fs.get_support(indices=True)
+  ```
+
+  선별된 특징 확인.
+
+  ```python
+  selectC = fs.get_support(indices=True)
+  tips_RFS = tips_imp.copy()
+  for i in range(X.shape[1]):
+      if i not in selectC:
+          if i < n:
+              k = i
+          else:
+              k = i+1
+          tips_RFS.drop(tips_imp.columns[[k]], axis=1,
+                        inplace=True)
+  tips_RFS
+  ```
+
+  칼럼 선별.
+
+
+
 ## Django
 
 
