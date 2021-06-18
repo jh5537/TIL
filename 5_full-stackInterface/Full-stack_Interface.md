@@ -452,6 +452,7 @@ tips 데이터를 이용.
   ```python
   import pymysql.cursors
   import pandas as pd
+  import numpy as np
   
   conn = pymysql.connect(host='127.0.0.1', user='root', 
                          password='0000', db='TIP_Schema', charset='utf8',
@@ -510,11 +511,8 @@ tips 데이터를 이용.
 
 - 임퓨터 가져오기.
 
-  ```python
-  from numpy import isnan
-  from sklearn.impute import SimpleImputer
-  ```
-
+  `from sklearn.impute import SimpleImputer`
+  
 - 결측치 확인.
 
   `tips.isnull().sum()`
@@ -558,7 +556,7 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 
 
 
-#### 4. 특징 추출
+#### 4. 특징 추출(RFE)
 
 차원 축소를 위해 관련성이 높은 변수만 남기고 그 외의 변수는 추출.
 
@@ -592,6 +590,10 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 - RFE를 이용한 특징 추출
 
   ```python
+  # RFE
+  from sklearn.feature_selection import RFE
+  from sklearn.svm import SVR
+  
   # 목표변수 입력
   y = tips_imp.iloc[:,n]
   X = tips_imp.drop(tips_imp.columns[[n]], axis=1)
@@ -602,9 +604,9 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
   for i in range(X.shape[1]):
       print('Column: %d, Rank: %d, Selected=%s' % (i, rfe.ranking_[i], rfe.support_[i]))
   ```
-
+  
   선별된 특징 확인.
-
+  
   ```python
   tips_RFE = tips_imp.copy()
   for i in range(X.shape[1]):
@@ -617,7 +619,7 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
                         inplace=True)
   tips_RFE
   ```
-
+  
   컬럼 선별.
 
 
@@ -628,6 +630,9 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 
   ```python
   # 정규화
+  from sklearn.preprocessing import MinMaxScaler
+  
+  
   trans = MinMaxScaler()
   tips_N = trans.fit_transform(tips_RFE)
   tips_RFE_norm = pd.DataFrame(tips_N, columns=[tips_RFE.columns])
@@ -640,19 +645,27 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 
   ```python
   # 표준화
+  from sklearn.preprocessing import StandardSca
+  
+  
   sc = StandardScaler()
   tips_S = sc.fit_transform(tips_RFE)
   tips_RFE_stan = pd.DataFrame(tips_S, columns=[tips_RFE.columns])
   tips_RFE_stan.describe().round()
   ```
-
+  
   
 
 #### + 다른 방법을 사용하여 특징 추출
 
 - PCA
 
+  - pca의 경우 차원축소 진행 전에 꼭 정규화/표준화를 해야 한다.
+
   ```python
+  # PCA
+  from sklearn.decomposition import PCA
+  
   trans = PCA(n_components=m)
   tips_PCA = trans.fit_transform(tips_imp)
   tips_PCA[:3,:]
@@ -663,6 +676,10 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 - Regression Feature Selection
 
   ```python
+  # regression feature selection
+  from sklearn.feature_selection import SelectKBest
+  from sklearn.feature_selection import f_regression
+  
   # 목표변수 입력
   y = tips_imp.iloc[:,n]
   X = tips_imp.drop(tips_imp.columns[[n]], axis=1)
@@ -671,9 +688,9 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
   tips_RFS = fs.fit_transform(X, y)
   fs.get_support(indices=True)
   ```
-
+  
   선별된 특징 확인.
-
+  
   ```python
   selectC = fs.get_support(indices=True)
   tips_RFS = tips_imp.copy()
@@ -687,7 +704,7 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
                         inplace=True)
   tips_RFS
   ```
-
+  
   칼럼 선별.
 
 
