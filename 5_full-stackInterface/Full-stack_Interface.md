@@ -709,7 +709,175 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 
 
 
+## Web
+
+- HTML/CSS
+
+- JavaScript/Jquery
+
+- BootSrap
+
+- Django(MVC/CRUD)
+
+
+
+### HTML
+
+define the content of web pages
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+
+</body>
+</html>
+```
+
+- `<!DOCTYPE html>`: 문서 타입이 html임을 확인. 없어도 작동함.
+- `<tagname> Content goes here... </tagname>`: `<>` 를 사용해 태그를 설정, 태그의 끝은 `/` 를 사용해 지정. 시작과 끝을 모두 표시해야 함.
+- `<html>`: the root element of an HTML page
+- `<head>`: contains meta information about the HTML page
+- `<title>`: specifies a title for the HTML page (which is shown in the browser's title bar or in the page's tab)
+- `<body>`: defines the document's body, and is a container for all the visible contents, such as headings, paragraphs, images, hyperlinks, tables, lists, etc.
+- `<h1>`: defines a large heading
+- `<p>`: defines a paragraph
+
+
+
+### CSS
+
+Cascading Style Sheets: specify the layout of web pages
+
+- Inline
+
+  ```html
+  <h1 style="color:blue;">A Blue Heading</h1>
+  
+  <p style="color:red;">A red paragraph.</p>
+  ```
+
+  - `style` 을 이용해 하나의 html 라인 안에서 이용.
+
+- Internal
+
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <style>
+  body {background-color: powderblue;}
+  h1   {color: blue;}
+  p    {color: red;}
+  </style>
+  </head>
+  <body>
+  
+  <h1>This is a heading</h1>
+  <p>This is a paragraph.</p>
+  
+  </body>
+  </html>
+  ```
+
+  - `<head>` 섹션에 `<style>` 을 정의하여 사용.
+
+- External
+
+  ```html
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+  
+  <h1>This is a heading</h1>
+  <p>This is a paragraph.</p>
+  
+  </body>
+  </html>
+  ```
+
+  - `link` 사용하여 외부 css 파일을 불러와 이용.
+
+  - 'styles.css'
+
+    ```css
+    body {
+      background-color: powderblue;
+    }
+    h1 {
+      color: blue;
+    }
+    p {
+      color: red;
+    }
+    ```
+
+    
+
+### JavaScript
+
+program the behavior of web pages
+
+```html
+<p id="demo"></p>
+
+<script>
+var x, y, z;  // Declare 3 variables
+x = 5;    // Assign the value 5 to x
+y = 6;    // Assign the value 6 to y
+z = x + y;  // Assign the sum of x and y to z
+
+document.getElementById("demo").innerHTML =
+"The value of z is " + z + ".";
+</script>
+```
+
+- `<script>` 를 정의하여 내부에 javascript 코드를 입력하여 활용.
+
+
+
+
+
 ## Django
+
+
+
+
+
+
+
+
+
+### Conda env for Django
+
+  conda deactivate
+
+  conda create --name django python=3.8.3
+
+  conda env list
+
+  conda activate django
+
+  pip install ipykernel
+
+  python -m ipykernel install --user --name django --display-name "Python Django"
+
+  conda install -c conda-forge jupyterlab
+
+
+
+### Django Installation
+
+  pip install Django==3.2.4
 
 
 
