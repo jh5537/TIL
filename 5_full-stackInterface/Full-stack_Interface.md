@@ -556,13 +556,13 @@ tips_imp = tips_imp.assign(BPP=tips_imp["total_bill"] / tips_imp["size"])
 
 
 
-#### 4. 특징 추출(RFE)
+#### 4. 특징 선별(RFE)
 
-차원 축소를 위해 관련성이 높은 변수만 남기고 그 외의 변수는 추출.
+차원 축소를 위해 관련성이 높은 변수만 남기고 그 외의 변수는 배제.
 
 - RFE와 PCA
   - RFE는 목표변수와 독립변수의 상관관계를 통해 차원을 축소. - 목표변수에 따라 결과가 다르게 나옴(Recursive Feature Elimination).
-  - PCA는 목표변수 없이 독립변수의 상관관계만으로 차원을 축소. - 목표변수와 관계없이 일정한 결과가 나옴(Principal component analysis).
+  - PCA는 목표변수 없이 독립변수의 상관관계만으로 차원을 축소(추출). - 목표변수와 관계없이 일정한 결과가 나옴(Principal component analysis).
 
 - regression feature selection
 
@@ -845,39 +845,51 @@ document.getElementById("demo").innerHTML =
 
 
 
+---
 
+### Django
 
-## Django
+**Conda env for Django**
 
+conda deactivate
 
+conda create --name django python=3.8.3
 
+conda env list
 
+conda activate django
 
+pip install ipykernel
 
+python -m ipykernel install --user --name django --display-name "Python Django"
 
-
-
-### Conda env for Django
-
-  conda deactivate
-
-  conda create --name django python=3.8.3
-
-  conda env list
-
-  conda activate django
-
-  pip install ipykernel
-
-  python -m ipykernel install --user --name django --display-name "Python Django"
-
-  conda install -c conda-forge jupyterlab
+conda install -c conda-forge jupyterlab
 
 
 
-### Django Installation
+**Django Installation**
 
-  pip install Django==3.2.4
+pip install Django==3.2.4
+
+
+
+**장고 실행**
+
+프로젝트 생성
+
+`django-admin startproject mysite`
+
+
+
+서버 구동
+
+`python manage.py runserver`
+
+
+
+polls 앱 만들기
+
+`python manage.py startapp polls`
 
 
 
