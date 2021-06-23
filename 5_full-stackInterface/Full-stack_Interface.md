@@ -875,11 +875,11 @@ pip install Django==3.2.4
 
 **장고 실행**
 
+![fpd4t997o8bpsqu11fp8](Full-stack_Interface.assets/fpd4t997o8bpsqu11fp8.jpg)
+
 프로젝트 생성
 
 `django-admin startproject mysite`
-
-
 
 서버 구동
 
@@ -887,10 +887,10 @@ pip install Django==3.2.4
 
 
 
-polls 앱 만들기
-
-`python manage.py startapp polls`
-
 
 
 ## Web_Crawling
+
+
+
+python camelot: pdf 파일에서 표를 추출.

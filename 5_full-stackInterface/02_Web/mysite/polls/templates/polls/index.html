@@ -1,0 +1,20 @@
+<html>
+<head><title>Polls Index</title></head>
+
+<body style="background-color: paleturquoise;">
+<h1>polls index page heading</h1>
+<p>polls index page paragraph</p>
+
+{% if latest_question_list %}
+    <ol>
+    {% for question in latest_question_list %}
+    <li><a href="{% url 'polls:detail' question.id %}">
+        {{ question.question_text }}</a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+</body>
+</html>
