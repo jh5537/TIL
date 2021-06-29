@@ -78,13 +78,21 @@
 
 ### [2_Web](./5_full-stackInterface/02_Web/)
 
-
+### [3_Web Crawling](./5_full-stackInterface/03_web_crawling/)
 
 
 
 ## [6_UI/UX](./6_UI_UX/)
 
-빅데이터를 위한 통계상식
 
-웹 데이터 수집 및 다이나믹 시각화
+
+## [7_빅데이터와 통계 상식](./7_bigdata&statistics/)
+
+
+
+
+
+
+
+
 

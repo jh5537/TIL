@@ -891,6 +891,41 @@ pip install Django==3.2.4
 
 ## Web_Crawling
 
+ChromeDriver 설치
 
 
-python camelot: pdf 파일에서 표를 추출.
+
+pip install selenium
+
+pip install chromedriver_autoinstaller
+
+pip install beautifulsoup4
+
+(pip install google_images_download)
+
+
+
+```python
+import chromedriver_autoinstaller
+chromedriver_autoinstaller.install()
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+chrome_options = Options()
+driver = webdriver.Chrome(options=chrome_options)
+```
+
+
+
+- python camelot: pdf 파일에서 표를 추출.
+
+pip install camelot-py==0.9.0
+
+pip install PyMuPDF==1.18.14
+
+
+
+ghostscript
+
+
+
